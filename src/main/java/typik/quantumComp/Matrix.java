@@ -6,6 +6,8 @@ public class Matrix {
 	
 	private ComplexNumber[][] data;
 
+	
+	
 	public Matrix(ComplexNumber[][] data) {
 		this.data = data;
 	}
@@ -67,6 +69,10 @@ public class Matrix {
 			}
 		}
 		return true;
+	}
+
+	protected ComplexNumber[][] getData() {
+		return data;
 	}
 	
 	
