@@ -22,6 +22,8 @@ public class Matrix {
 	
 	private ComplexNumber[][] data;
 
+	
+	
 	public Matrix(ComplexNumber[][] data) {
 		this.data = data;
 	}
