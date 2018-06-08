@@ -56,4 +56,44 @@ public class MatrixTest {
 		matrixAdamar = new ComplexNumber( 1/ Math.sqrt( 2 ) , 0 ).multiply( matrixAdamar );
 		assertTrue( matrixAdamar.isUnitary( new MathContext( 5 , RoundingMode.HALF_UP ) ) );
 	}
+	
+	@Test
+	public void testTensorMultiply(){
+		Matrix m1 = new Matrix(
+				new ComplexNumber[][]{
+					{ new ComplexNumber( 1 , 0  ) , new ComplexNumber( 2 , 0 ), new ComplexNumber( 5 , 0 ) },
+					{ new ComplexNumber( 3 , 0  ) , new ComplexNumber( 4 , 0 ), new ComplexNumber( 0 , 0 ) }					
+				});
+		Matrix m2 = new Matrix(
+				new ComplexNumber[][]{
+					{ new ComplexNumber( 0 , 0  ) },
+					{ new ComplexNumber( 2 , 0 )  }, 
+					{ new ComplexNumber( -1 , 0 ) }					
+				});
+		Matrix result = m1.tensorMultiply( m2 );
+
+		assertEquals( new ComplexNumber( 0  , 0 ), result.get( 1 , 1 ) );
+		assertEquals( new ComplexNumber( 0  , 0 ), result.get( 1 , 2 ) );
+		assertEquals( new ComplexNumber( 0  , 0 ), result.get( 1 , 3 ) );
+		
+		assertEquals( new ComplexNumber( 2  , 0 ), result.get( 2 , 1 ) );
+		assertEquals( new ComplexNumber( 4  , 0 ), result.get( 2 , 2 ) );
+		assertEquals( new ComplexNumber( 10 , 0 ), result.get( 2 , 3 ) );
+
+		assertEquals( new ComplexNumber( -1 , 0 ), result.get( 3 , 1 ) );
+		assertEquals( new ComplexNumber( -2 , 0 ), result.get( 3 , 2 ) );
+		assertEquals( new ComplexNumber( -5 , 0 ), result.get( 3 , 3 ) );
+
+		assertEquals( new ComplexNumber( 0  , 0 ), result.get( 4 , 1 ) );
+		assertEquals( new ComplexNumber( 0  , 0 ), result.get( 4 , 2 ) );
+		assertEquals( new ComplexNumber( 0  , 0 ), result.get( 4 , 3 ) );
+
+		assertEquals( new ComplexNumber( 6  , 0 ), result.get( 5 , 1 ) );
+		assertEquals( new ComplexNumber( 8  , 0 ), result.get( 5 , 2 ) );
+		assertEquals( new ComplexNumber( 0  , 0 ), result.get( 5 , 3 ) );
+
+		assertEquals( new ComplexNumber( -3 , 0 ), result.get( 6 , 1 ) );
+		assertEquals( new ComplexNumber( -4 , 0 ), result.get( 6 , 2 ) );
+		assertEquals( new ComplexNumber( 0  , 0 ), result.get( 6 , 3 ) );
+	}
 }

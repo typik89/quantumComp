@@ -4,10 +4,36 @@ import java.math.MathContext;
 
 public class Matrix {
 	
+	public static Matrix I = new Matrix( new ComplexNumber[][]{ 
+		{ new ComplexNumber( 1 , 0 ) , new ComplexNumber( 0 , 0 ) } , 
+		{ new ComplexNumber( 0 , 0 ) , new ComplexNumber( 1 , 0 ) } } );
+	public static Matrix H = new Matrix( new ComplexNumber[][]{ 
+		{ new ComplexNumber( 1 , 0 ) , new ComplexNumber( 0 , 0 ) } , 
+		{ new ComplexNumber( 0 , 0 ) , new ComplexNumber( 1 , 0 ) } } ).multiply( new ComplexNumber( 1 / Math.sqrt( 2 ) , 0 ) );
+	public static Matrix X = new Matrix( new ComplexNumber[][]{ 
+		{ new ComplexNumber( 0 , 0 ) , new ComplexNumber( 1 , 0 ) } , 
+		{ new ComplexNumber( 1 , 0 ) , new ComplexNumber( 0 , 0 ) } } );
+	public static Matrix Y = new Matrix( new ComplexNumber[][]{ 
+		{ new ComplexNumber( 0 , 0 ) , new ComplexNumber( 0 , -1 ) } , 
+		{ new ComplexNumber( 0 , 1 ) , new ComplexNumber( 0 , 0  ) } } );
+	public static Matrix Z = new Matrix( new ComplexNumber[][]{ 
+		{ new ComplexNumber( 1 , 0 ) , new ComplexNumber( 0  , 0 ) } , 
+		{ new ComplexNumber( 0 , 0 ) , new ComplexNumber( -1 , 0 ) } } );
+	
 	private ComplexNumber[][] data;
 
 	public Matrix(ComplexNumber[][] data) {
 		this.data = data;
+	}
+
+	private Matrix multiply(ComplexNumber complexNumber) {
+		ComplexNumber[][] newData = new ComplexNumber[getColumnsCount()][getRowsCount()];
+		for( int i = 0 ;i < getColumnsCount(); ++i ){
+			for( int j = 0; j < getRowsCount(); ++j ){
+				newData[i][j] = data[i][j].multiply( complexNumber );
+			}
+		}
+		return new Matrix( newData );
 	}
 
 	public ComplexNumber get(int rowIndex,int columnIndex) {
@@ -67,6 +93,31 @@ public class Matrix {
 			}
 		}
 		return true;
+	}
+
+	public Matrix tensorMultiply(Matrix m2) {
+		ComplexNumber[][] data = new ComplexNumber[ getRowsCount()*m2.getRowsCount() ][ getColumnsCount()*m2.getColumnsCount() ];
+		for( int i = 0; i < getRowsCount() * m2.getRowsCount(); ++i ){
+			for( int j = 0; j < getColumnsCount() * m2.getColumnsCount(); ++j ){
+				int i1 = i / m2.getRowsCount    ();
+				int j1 = j / m2.getColumnsCount ();
+				int i2 = i % m2.getRowsCount    ();
+				int j2 = i % m2.getColumnsCount ();
+				data[i][j] = this.data[i1][j1].multiply(  m2.data[i2][j2] ); 
+			}
+		}
+		return new Matrix( data );
+	}
+	
+	public Matrix tensorPower( int pow ){
+		if ( pow < 1 ){
+			throw new IllegalArgumentException( "Power can't be less than 1" );
+		}
+		Matrix result = this;
+		for( int i = 0; i < pow - 1; ++i ){
+			result = result.tensorMultiply( this );
+		}
+		return result;
 	}
 	
 	
